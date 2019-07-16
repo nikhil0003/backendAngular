@@ -92,12 +92,17 @@ public class BookResource {
 	 */
 
 	@GetMapping(value = "/image/{id}")
-	public ResponseEntity<byte[]> getImage(@PathVariable("id") Long id) throws IOException  {
+	public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) throws IOException  {
 		String filepath = "src/main/resources/static/image/book/"+ String.valueOf(id)+".png";
+		System.out.println("working");
 		File img = new File(filepath);
 		return ResponseEntity.ok()
 				.contentType(MediaType.valueOf(FileTypeMap.getDefaultFileTypeMap().getContentType(img)))
 				.body(Files.readAllBytes(img.toPath()));
 	}
-	
+	@RequestMapping(value ="/update",method = RequestMethod.POST)
+	public Book updatetBookPost(@RequestBody Book book) {
+		bookResource.save(book);
+	return book;
+	}
 }
