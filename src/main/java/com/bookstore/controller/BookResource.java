@@ -5,15 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.sql.Blob;
-import java.sql.SQLException;
 
-import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,5 +101,29 @@ public class BookResource {
 	public Book updatetBookPost(@RequestBody Book book) {
 		bookResource.save(book);
 	return book;
+	}
+	
+	@RequestMapping(value = "/update/image",method = RequestMethod.POST)
+	public Map<String, String> updateImage(@RequestParam("id") Long id,HttpServletRequest request , HttpServletResponse response) {
+		
+		@SuppressWarnings("unused")
+		Book b = bookResource.findOneBook(id);
+		
+	try {
+		MultipartHttpServletRequest multiHttpServletRequest = (MultipartHttpServletRequest) request;
+		Iterator<String> it = multiHttpServletRequest.getFileNames();
+		MultipartFile multipartFile = multiHttpServletRequest.getFile(it.next());
+		String fileName = id+".png";
+		byte[] bytes = multipartFile.getBytes();
+		Files.deleteIfExists(Paths.get("src/main/resources/static/image/book/"+fileName));
+		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream("src/main/resources/static/image/book/"+fileName));
+		stream.write(bytes);
+		stream.close();
+		return Collections.singletonMap("upload is successful","ok working session");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return Collections.singletonMap("upload is failed"," non working");
+	}
 	}
 }
