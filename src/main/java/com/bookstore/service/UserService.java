@@ -9,4 +9,8 @@ public interface UserService {
 	
 	User createUser(User user, Set<UserRole> userRoles);
 
+	User findByUsername(String userName);
+
+	User findByEmail(String userEmail);
+
 }

@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService{
 	private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
 	@Autowired
-	private UserRespository userRepository;
 	
+	private UserRespository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
 	
@@ -42,5 +42,14 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		return localUser;
+	}
+
+	public User findByUsername(String userName) {
+		return userRepository.findByUsername(userName);
+		 
+	}
+
+	public User findByEmail(String userEmail) {
+		return userRepository.findByEmail(userEmail);
 	}
 }
